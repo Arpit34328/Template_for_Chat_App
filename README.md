@@ -80,13 +80,19 @@ Client:
 
   New connection accepted: username [GID_Alice]
 
+  Client [GID_Alice]: Hello, I am GID_Alice.
+
   ************* Total clients: 1 *************
 
   New connection accepted: username [GID_Bob]
 
+  Client [GID_Alice]: Hello, I am GID_Bob.
+
   ************* Total clients: 2 *************
 
   New connection accepted: username [GID_Charlie]
+
+  Client [GID_Alice]: Hello, I am GID_Charlie.
 
   ************* Total clients: 3 *************
 
@@ -97,7 +103,7 @@ Client:
 3 clients connected (Alice, Bob, Charlie)  
 
 **Input:**  
-Alice sends:  
+Alice sends to all below message as input:  
 
 Hello everyone, this is Alice!
 
@@ -111,7 +117,7 @@ Hello everyone, this is Alice!
   
   Server: client [GID_Alice]: Hello everyone, this is Alice!
 
-- **Charlie’s Client Output:**
+- **Bob’s Client Output:**
   
   Server: client [GID_Alice]: Hello everyone, this is Alice!
 
@@ -129,7 +135,7 @@ Hello everyone, this is Alice!
 3 clients connected (Alice, Bob, Charlie)  
 
 **Input:**  
-Alice sends:  
+Alice sends to Bob below message as input:  
 
 /msg GID_Bob Hey Bob, how are you doing?
 
@@ -155,7 +161,7 @@ Alice sends:
 2 clients connected (Alice, Bob)  
 
 **Input:**  
-Alice sends:  
+Alice sends to nonexistent client below message:  
 
 /msg GID_NonExistent Hello there!
 
@@ -176,7 +182,7 @@ Alice sends:
 3 clients connected (Alice, Bob, Charlie)  
 
 **Input:**  
-Alice sends:  
+Alice sends below command to server as input:  
 
 /list
 
@@ -199,17 +205,17 @@ Alice sends:
 
 **Setup:**  
 2 clients connected (Alice, Bob)  
-Create test file `test.txt` with content `"Hello from file!"`  
+Create seperate sub diractory with name `Documents` in Client diractory.
+In this `Documents` dir create test file `test.txt` with some random text which have atleast 500 words.  
 
 **Input:**  
 Alice sends:  
 
-/file GID_Bob test.txt
-
+/file GID_Bob Documents/test.txt
 
 **Expected Output:**  
 - **Server Output:**  
-  /file command called from [GID_Alice], send file [test.txt] to [GID_Bob].
+  /file command called from [GID_Alice], send file [Documents/test.txt] to [GID_Bob].
 
   File transfer ready notification sent to sender.
 
@@ -221,13 +227,11 @@ Alice sends:
   File sent successfully!
 
 - **Bob’s Client Output:**  
-  Server: /file command call from client [GID_Alice] to send file [test.txt] to you.
+  Server: /file command call from client [GID_Alice] to send file [Documents/test.txt] to you.
 
-  Receiving file: test.txt
+  Receiving file: Documents/test.txt
 
   File received successfully!
-
-**Post-condition:** Bob should have `test.txt` created locally.
 
 ---
 
@@ -238,16 +242,15 @@ Alice sends:
 1 client connected (Alice)  
 
 **Input:**  
-/file GID_NonExistent test.txt
+/file GID_NonExistent Documents/test.txt
 
 
 **Expected Output:**  
 - **Server Output:**  
-  /file command called from [GID_Alice], send file [test.txt] to [GID_NonExistent].
+  /file command called from [GID_Alice], send file [Documents/test.txt] to [GID_NonExistent].
 
 - **Alice’s Client Output:**  
   Server: Sorry! No client found with this name.
-
 
 ---
 
@@ -340,20 +343,20 @@ Server: Your message can't be interpreted properly.
 
 #### **Test Case 14: File Transfer with Duplicate Filenames**
 **Setup:**  
-Bob already has `test.txt`  
+Bob already has `Documents/test.txt`  
 
 **Input:**  
-/file GID_Bob test.txt
+/file GID_Bob Documents/test.txt
 
 **Expected Output:**  
 - **Bob’s Client Output:**  
-  Server: /file command call from client [GID_Alice] to send file [test.txt] to you.
+  Server: /file command call from client [GID_Alice] to send file [Documents/test.txt] to you.
 
-  Receiving file: test.txt
+  Receiving file: Documents/test.txt
 
   File received successfully!
 
-- **Result:** File saved as `test(1).txt`
+- **Result:** File saved as `Documents/test(1).txt`
 
 ---
 
